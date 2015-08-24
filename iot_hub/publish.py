@@ -7,6 +7,7 @@ inifile.read("./config.ini")
 
 hostname=inifile.get("settings", "broker_name")
 destinations="test"
-message="hello"
 
-publish.single(destinations, message, hostname=hostname)
+class MessageSend:
+    def messageSend(self, message=None):
+        publish.single(destinations, message, hostname=hostname)
