@@ -1,10 +1,13 @@
 from eventlet import wsgi
 import eventlet
 
-def get_bind_addr(default_port=None):
-    """Return the name or ip address of host and port to bind to."""
-    # TODO Replace the host and port values to dynamic value.
-    return ("0.0.0.0", "8080" or default_port)
+def _get_bind_addr(default_port=None):
+    # TODO: Replace the host and port values to dynamic value.
+    return ("0.0.0.0", 8080 or default_port)
+
+def get_socket(default_port=None):
+    bind_addr = _get_bind_addr(default_port)
+    return eventlet.listen(bind_addr)
 
 def parse_request(environ):
     response = {'response': {}}
@@ -22,8 +25,7 @@ def application(environ, start_response):
     return parse_request(environ)
 
 if __name__ == '__main__':
-    bind_addr = '0.0.0.0'
-    port = 8080
-    server_socket = eventlet.listen((bind_addr, port))
+
+    server_socket = get_socket()
 
     wsgi.server(server_socket, application)
