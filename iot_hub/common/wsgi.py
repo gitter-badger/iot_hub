@@ -1,14 +1,10 @@
 from eventlet import wsgi
 import eventlet
-from oslo.config import cfg
 
-socket_opts = [
-    cfg.IntOpt('',
-               default=
-]
-
-CONF = cfg.CONF
-CONF.register_opts(socket_opts)
+def get_bind_addr(default_port=None):
+    """Return the name or ip address of host and port to bind to."""
+    # TODO Replace the host and port values to dynamic value.
+    return ("0.0.0.0", "8080" or default_port)
 
 def parse_request(environ):
     response = {'response': {}}
