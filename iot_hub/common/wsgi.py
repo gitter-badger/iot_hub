@@ -13,19 +13,23 @@ def parse_request(environ):
     response = {'response': {}}
     method = environ.get('REQUEST_METHOD')
     if method == 'GET':
-        response["data"] = "GET\n"
+        response['response']['data'] = "GET\n"
     elif method == 'POST':
-        response["data"] = "POST\n"
+        response['response']['data'] = "POST\n"
 
     return response
 
-def application(environ, start_response):
-    start_response('200 OK', [('Content-Type', 'text/json')])
-    
-    return parse_request(environ)
+class Server:
+    @staticmethod
+    def application(environ, start_response):
+        start_response('200 OK', [('Content-Type', 'application/json')])
+
+        return parse_request(environ)
+
+    def start(self, default_port):
+        server_sock = get_socket(default_port)
+        wsgi.server(server_sock, self.application)
 
 if __name__ == '__main__':
-
-    server_socket = get_socket()
-
-    wsgi.server(server_socket, application)
+    server = Server()
+    server.start(8080)
